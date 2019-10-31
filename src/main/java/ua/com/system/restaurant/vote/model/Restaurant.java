@@ -10,7 +10,7 @@ public class Restaurant extends AbstractRegisteredEntity {
 
     @JoinColumn(name = "user_id")
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     public Restaurant() {

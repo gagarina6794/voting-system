@@ -18,10 +18,11 @@ public class Menu extends AbstractBaseEntity {
 
     @JoinColumn(name = "restaurant_id")
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Restaurant restaurant;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @NotNull
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Dish> dishes;
 
     public Menu() {
