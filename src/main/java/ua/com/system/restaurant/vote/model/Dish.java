@@ -1,16 +1,14 @@
 package ua.com.system.restaurant.vote.model;
 
-import org.springframework.util.CollectionUtils;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
-@Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "restaurant_id"})})
+@Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "menu_id"})})
 public class Dish extends AbstractNamedEntity {
 
     @Column(name = "price", nullable = false)
@@ -18,23 +16,19 @@ public class Dish extends AbstractNamedEntity {
     @Min(value = 0)
     private BigDecimal price;
 
-    @JoinColumn(name = "restaurant_id")
+    @JsonIgnore
+    @JoinColumn(name = "menu_id")
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    private Restaurant restaurant;
-
-    @NotNull
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Menu> menus;
+    private Menu menu;
 
     public Dish() {
     }
 
-    public Dish(Integer id, String name, BigDecimal price, Restaurant restaurant, Set<Menu> menus) {
+    public Dish(Integer id, String name, BigDecimal price, Menu menu) {
         super(id, name);
         this.price = price;
-        this.restaurant = restaurant;
-        setMenus(menus);
+        this.menu = menu;
     }
 
     public BigDecimal getPrice() {
@@ -45,19 +39,19 @@ public class Dish extends AbstractNamedEntity {
         this.price = price;
     }
 
-    public Restaurant getRestaurant() {
-        return restaurant;
+    public Menu getMenu() {
+        return menu;
     }
 
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
+    public void setMenu(Menu menu) {
+        this.menu = menu;
     }
 
-    public Set<Menu> getMenus() {
-        return menus;
-    }
-
-    public void setMenus(Set<Menu> menus) {
-        this.menus = CollectionUtils.isEmpty(menus) ? new HashSet<>() : Set.copyOf(menus);
+    @Override
+    public String toString() {
+        return "Dish{" +
+                "price=" + price +
+                ", menu=" + menu +
+                '}';
     }
 }

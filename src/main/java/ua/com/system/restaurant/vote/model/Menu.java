@@ -1,11 +1,10 @@
 package ua.com.system.restaurant.vote.model;
 
-import org.springframework.util.CollectionUtils;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -16,13 +15,14 @@ public class Menu extends AbstractBaseEntity {
     @NotNull
     private LocalDate created;
 
+    @JsonIgnore
     @JoinColumn(name = "restaurant_id")
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Restaurant restaurant;
 
     @NotNull
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")
     private Set<Dish> dishes;
 
     public Menu() {
@@ -32,7 +32,7 @@ public class Menu extends AbstractBaseEntity {
         super(id);
         this.created = created;
         this.restaurant = restaurant;
-        setDishes(dishes);
+        this.dishes = dishes;
     }
 
     public LocalDate getCreated() {
@@ -56,6 +56,15 @@ public class Menu extends AbstractBaseEntity {
     }
 
     public void setDishes(Set<Dish> dishes) {
-        this.dishes = CollectionUtils.isEmpty(dishes) ? new HashSet<>() : Set.copyOf(dishes);
+        this.dishes = dishes;
+    }
+
+    @Override
+    public String toString() {
+        return "Menu{" +
+                "created=" + created +
+                ", restaurant=" + restaurant +
+                ", dishes=" + dishes +
+                '}';
     }
 }

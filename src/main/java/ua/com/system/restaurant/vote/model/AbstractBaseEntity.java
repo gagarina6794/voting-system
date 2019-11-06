@@ -1,10 +1,11 @@
 package ua.com.system.restaurant.vote.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
-public abstract class AbstractBaseEntity {
+public abstract class AbstractBaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
